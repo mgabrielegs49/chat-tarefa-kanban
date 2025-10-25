@@ -1,14 +1,46 @@
-/* Basic app styles (Tailwind utilities are provided via CDN in index.html) */
-html, body, #root {
-	height: 100%;
-}
-body {
-	margin: 0;
-	font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-	background: #ffffff;
-	color: #0f172a; /* slate-900 fallback */
+/* 
+  NOTA: Tailwind CSS via CDN (fallback por problemas de instalação local)
+  Idealmente deveria usar: npm install tailwindcss postcss autoprefixer
+  Mas por problemas de rede/registry, usando CDN temporariamente
+*/
+
+* {
+  box-sizing: border-box;
 }
 
-/* Lightweight non-Tailwind fallbacks for critical layout */
-.column { background: #f8fafc; border-radius: 6px; padding: 12px; min-height: 200px; }
-.task { background: #ffffff; border: 1px solid #e6e6e6; border-radius: 6px; padding: 8px; margin-bottom: 8px; cursor: pointer; }
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #ffffff;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Classes customizadas para TaskBoard */
+.column {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 12px;
+  min-height: 200px;
+  border: 1px solid #e2e8f0;
+}
+
+.task {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.task:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
