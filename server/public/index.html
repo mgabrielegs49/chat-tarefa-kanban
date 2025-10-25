@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Chat + Taskboard (static)</title>
+    <style>
+      body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:16px;background:#f3f4f6}
+      .container{display:flex;gap:16px}
+      .panel{background:#fff;border-radius:8px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+      .chat{width:320px}
+      .tasks{flex:1}
+      .columns{display:flex;gap:8px}
+      .col{background:#f8fafc;padding:8px;border-radius:6px;flex:1;min-height:200px}
+      .task{background:#fff;border:1px solid #e5e7eb;padding:8px;border-radius:6px;margin-bottom:8px}
+      .row{display:flex;gap:8px}
+      input,textarea,button{font-size:14px}
+      .small{font-size:12px;color:#555}
+    </style>
+  </head>
+  <body>
+    <h1>Chat + Taskboard (rodando no servidor)</h1>
+    <div class="container">
+      <div class="panel chat">
+        <h3>Chat</h3>
+        <div>
+          <input id="username" placeholder="Seu nome" style="width:100%;padding:6px;margin-bottom:6px" />
+          <div id="messages" style="height:200px;overflow:auto;background:#fafafa;padding:8px;border-radius:4px;border:1px solid #eee"></div>
+          <div style="margin-top:8px" class="row">
+            <input id="msg" placeholder="Mensagem..." style="flex:1;padding:6px" />
+            <button id="send">Enviar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel tasks">
+        <h3>Taskboard</h3>
+        <div style="margin-bottom:8px" class="row">
+          <input id="title" placeholder="Título" style="flex:1;padding:6px" />
+          <input id="desc" placeholder="Descrição" style="flex:1;padding:6px" />
+          <button id="create">Criar</button>
+        </div>
+        <div class="columns">
+          <div class="col" id="todo-col"><h4>To Do</h4></div>
+          <div class="col" id="inprogress-col"><h4>In Progress</h4></div>
+          <div class="col" id="done-col"><h4>Done</h4></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
