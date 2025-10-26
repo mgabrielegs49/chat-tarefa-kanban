@@ -1,220 +1,230 @@
-# Chat + Taskboard em Tempo Real
+# 📋 Chat + TaskBoard em Tempo Real
 
-Projeto de chat e gerenciamento de tarefas (TaskBoard estilo Kanban) em tempo real usando Node.js, Express, Socket.IO, React, Vite e Tailwind CSS.
+Projeto de chat e gerenciamento de tarefas (Kanban) com comunicação em tempo real usando WebSockets.
 
-## 📋 Requisitos
+## 🛠️ Tecnologias Utilizadas
 
-- **Node.js**: >= 20.19.0 (recomendado v22+)
-- **npm**: >= 10.0.0
+### Backend
+- **Node.js** v22+
+- **Express** - Framework web
+- **Socket.IO** - Comunicação em tempo real via WebSockets
+- **CORS** - Habilitado para desenvolvimento
 
-## 🏗️ Arquitetura
+### Frontend
+- **React** 19 - Biblioteca UI
+- **TypeScript** - Tipagem estática
+- **Vite** - Build tool e dev server
+- **Tailwind CSS** - Framework CSS utilitário
+- **Socket.IO Client** - Cliente WebSocket
 
-### Backend (Server)
-- **Express**: Framework web para Node.js
-- **Socket.IO**: Comunicação em tempo real via WebSockets
-- **CORS**: Configurado para desenvolvimento
-- **Porta**: 3001
+## 📁 Estrutura do Projeto
 
-### Frontend (Client)
-- **React 19**: Biblioteca UI
-- **TypeScript**: Tipagem estática
-- **Vite**: Build tool e dev server
-- **Tailwind CSS**: Framework CSS utilitário (via CDN*)
-- **Socket.IO Client**: Cliente WebSocket
-- **Porta**: 5173
-
-\* *Nota: Tailwind está sendo carregado via CDN como fallback temporário devido a problemas de instalação local do npm em alguns ambientes. Idealmente deveria usar `tailwindcss` instalado via npm.*
+```
+chat-main/
+├── server/                 # Backend Node.js
+│   ├── index.js           # Servidor Express + Socket.IO
+│   ├── package.json
+│   └── public/            # Cliente estático alternativo
+│
+└── client/                # Frontend React
+    ├── src/
+    │   ├── App.tsx        # Componente principal (Chat + TaskBoard)
+    │   ├── TaskBoard.tsx  # Componente Kanban
+    │   ├── socket.ts      # Configuração Socket.IO
+    │   └── index.css      # Estilos Tailwind
+    ├── package.json
+    ├── vite.config.ts     # Configuração Vite
+    └── tailwind.config.cjs # Configuração Tailwind
+```
 
 ## 🚀 Como Executar
 
-### 1. Instalar Dependências
+### Pré-requisitos
+- **Node.js** >= 20.19.0 (recomendado v22+)
+- **npm** (incluído com Node.js)
 
-#### Server:
+### 1️⃣ Instalar Dependências
+
+**Backend:**
 ```bash
 cd server
 npm install
 ```
 
-#### Client:
+**Frontend:**
 ```bash
 cd client
 npm install
+
+# Se houver erro com módulos nativos do Rollup:
+npm install @rollup/rollup-win32-x64-msvc
 ```
 
-### 2. Iniciar o Servidor Backend
+### 2️⃣ Iniciar os Servidores
 
+**Terminal 1 - Backend (porta 3001):**
 ```bash
 cd server
 node index.js
 ```
 
-Você deverá ver:
-```
-Servidor rodando na porta 3001
-```
-
-### 3. Iniciar o Cliente Frontend
-
-Em outro terminal:
-
+**Terminal 2 - Frontend (porta 5173):**
 ```bash
 cd client
 npm run dev
 ```
 
-Você deverá ver algo como:
-```
-VITE v7.x.x  ready in xxx ms
-➜  Local:   http://localhost:5173/
-```
+### 3️⃣ Acessar a Aplicação
 
-### 4. Acessar a Aplicação
+Abra o navegador em: **http://localhost:5173**
 
-Abra seu navegador em: **http://localhost:5173**
+- **Backend API**: http://localhost:3001
+- **Frontend (Vite)**: http://localhost:5173
 
 ## 🎯 Funcionalidades
 
-### Chat em Tempo Real
-- Digite seu nome
-- Envie mensagens
-- Veja mensagens de outros usuários em tempo real
-- Todas as abas conectadas recebem as mensagens instantaneamente
+### 💬 Chat em Tempo Real
+- Digite seu nome e envie mensagens
+- Mensagens sincronizadas em tempo real entre todos os clientes conectados
+- Histórico de mensagens mantido durante a sessão
 
-### TaskBoard Kanban
-- **Criar tarefas**: Adicione título e descrição
+### 📋 TaskBoard (Kanban)
 - **3 colunas**: To Do, In Progress, Done
-- **Mover tarefas**: Entre as colunas com botões
-- **Remover tarefas**: Delete tarefas não necessárias
-- **Sincronização em tempo real**: Todas as mudanças são propagadas para todos os clientes conectados
+- **Criar tarefas**: Adicione título e descrição
+- **Mover tarefas**: Navegue entre as colunas
+- **Remover tarefas**: Delete tarefas desnecessárias
+- **Sincronização em tempo real**: Todas as alterações são propagadas instantaneamente para todos os clientes
 
-## 🔧 Estrutura do Projeto
+## 🔌 Eventos Socket.IO
 
-```
-chat-main/
-├── server/
-│   ├── index.js          # Servidor Express + Socket.IO
-│   ├── package.json      # Dependências do servidor
-│   └── public/           # Arquivos estáticos (fallback)
-│       ├── index.html
-│       └── app.js
-├── client/
-│   ├── src/
-│   │   ├── App.tsx       # Componente principal (Chat + TaskBoard)
-│   │   ├── TaskBoard.tsx # Componente do quadro de tarefas
-│   │   ├── socket.ts     # Configuração Socket.IO client
-│   │   ├── main.tsx      # Entry point React
-│   │   └── index.css     # Estilos globais
-│   ├── index.html        # HTML principal
-│   ├── vite.config.ts    # Configuração Vite
-│   ├── tailwind.config.cjs # Configuração Tailwind
-│   ├── postcss.config.cjs  # Configuração PostCSS
-│   └── package.json      # Dependências do client
-└── README.md
-```
+### Cliente → Servidor
+- `chat_message` - Enviar mensagem no chat
+- `create_task` - Criar nova tarefa
+- `update_task` - Atualizar tarefa (ex: mover de coluna)
+- `delete_task` - Remover tarefa
 
-## 📡 Eventos Socket.IO
+### Servidor → Cliente
+- `chat_message` - Receber mensagem do chat
+- `tasks` - Receber lista atualizada de tarefas (emitido ao conectar e após cada mudança)
 
-### Chat
-- `chat_message`: Envia/recebe mensagens do chat
+## 📦 Estrutura de Dados
 
-### TaskBoard
-- `tasks`: Servidor envia lista completa de tarefas
-- `create_task`: Cliente cria nova tarefa
-- `update_task`: Cliente atualiza tarefa (ex: mudar status)
-- `delete_task`: Cliente remove tarefa
-
-## 🐛 Troubleshooting
-
-### Porta já em uso
-Se as portas 3001 ou 5173 já estiverem em uso:
-
-```bash
-# Windows
-netstat -ano | findstr :3001
-netstat -ano | findstr :5173
-# Mate o processo com: taskkill /PID <PID> /F
-
-# Linux/Mac
-lsof -ti:3001 | xargs kill -9
-lsof -ti:5173 | xargs kill -9
-```
-
-### Erro de versão do Node
-Se você vir `The current Node.js version v20.3.1 is not supported by Vite`:
-- Atualize o Node.js para v20.19+ ou v22+
-- Download: https://nodejs.org/
-
-### Problemas com Tailwind
-O projeto usa Tailwind via CDN como fallback. Se quiser instalar localmente:
-
-```bash
-cd client
-npm install tailwindcss postcss autoprefixer --save-dev
-```
-
-Depois remova a linha do CDN do `client/index.html` e ajuste `client/src/index.css` para usar as diretivas `@tailwind`.
-
-## 🔐 Segurança
-
-⚠️ **AVISO**: Este projeto está configurado para desenvolvimento com CORS aberto (`origin: '*'`). 
-
-Antes de colocar em produção:
-1. Restrinja o CORS no `server/index.js`
-2. Adicione autenticação
-3. Valide inputs
-4. Use HTTPS
-5. Configure rate limiting
-
-## 📝 Persistência
-
-Atualmente as tarefas são armazenadas **apenas em memória**. Quando o servidor reinicia, os dados são perdidos.
-
-Para persistência, considere adicionar:
-- SQLite (simples, arquivo local)
-- MongoDB (NoSQL, escalável)
-- PostgreSQL (relacional, robusto)
-
-## 🎨 Customização
-
-### Mudar porta do servidor
-Edite `server/index.js`:
-```javascript
-server.listen(3001, () => { // Mude 3001 para sua porta
-```
-
-### Mudar porta do Vite
-Edite `client/vite.config.ts`:
+### Task
 ```typescript
-server: {
-  port: 5173, // Mude aqui
+{
+  id: number;
+  title: string;
+  description?: string;
+  status: 'todo' | 'in-progress' | 'done';
 }
 ```
 
-### Alterar URL do Socket.IO
-Se o servidor estiver em outro host, edite `client/src/socket.ts`:
+### Chat Message
 ```typescript
-const socket = io('http://seu-servidor:3001');
+{
+  username: string;
+  message: string;
+}
 ```
 
-## 📚 Tecnologias Utilizadas
+## ⚙️ Configuração
 
-- [Node.js](https://nodejs.org/)
-- [Express](https://expressjs.com/)
-- [Socket.IO](https://socket.io/)
-- [React](https://react.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Vite](https://vite.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
+### Porta do Backend
+Altere em `server/index.js`:
+```javascript
+server.listen(3001, () => {
+  console.log("Servidor rodando na porta 3001");
+});
+```
 
-## 📄 Licença
+### Porta do Frontend
+Altere em `client/vite.config.ts`:
+```typescript
+export default defineConfig({
+  server: {
+    port: 5173,
+  },
+});
+```
 
-Este projeto é para fins educacionais.
+### Conexão Socket.IO
+Altere em `client/src/socket.ts`:
+```typescript
+export const socket = io("http://localhost:3001");
+```
 
-## 👤 Autor
+## 🐛 Solução de Problemas
 
-Maria Gabriele
+### Erro: "Cannot find module @rollup/rollup-win32-x64-msvc"
+```bash
+cd client
+npm install @rollup/rollup-win32-x64-msvc
+```
+
+### Erro: "Vite requires Node.js >= 20.19.0"
+- Atualize o Node.js para a versão 22+
+- Download: https://nodejs.org/
+
+### Porta já em uso
+```bash
+# Windows - Matar processo na porta 3001
+netstat -ano | findstr :3001
+taskkill /PID <PID> /F
+
+# Windows - Matar processo na porta 5173
+netstat -ano | findstr :5173
+taskkill /PID <PID> /F
+```
+
+### Tailwind não funciona
+```bash
+cd client
+npm install tailwindcss postcss autoprefixer
+```
+
+## 🎨 Personalização
+
+### Modificar Cores do Tailwind
+Edite `client/tailwind.config.cjs`:
+```javascript
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#your-color',
+      },
+    },
+  },
+}
+```
+
+### Adicionar Persistência de Dados
+Atualmente as tarefas são armazenadas em memória. Para persistir:
+- Adicione **MongoDB** ou **SQLite**
+- Modifique `server/index.js` para salvar/carregar do banco
+
+## 📝 Notas
+
+- **Desenvolvimento**: CORS está configurado com `origin: '*'` - **restrinja antes de produção**
+- **Armazenamento**: Tarefas são perdidas ao reiniciar o servidor (armazenamento em memória)
+- **Segurança**: Não há autenticação - adicione se necessário para produção
+
+## 👨‍💻 Desenvolvimento
+
+### Build de Produção
+```bash
+cd client
+npm run build
+```
+Os arquivos otimizados estarão em `client/dist/`.
+
+### Servir Build de Produção
+```bash
+cd client
+npm run preview
+```
 
 ---
 
-**Status do Projeto**: ✅ Funcional - Backend + Frontend + Socket.IO + TaskBoard implementados e testados
+**Desenvolvido com ❤️ usando Node.js, Express, Socket.IO, React, TypeScript, Vite e Tailwind CSS**
 
