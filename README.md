@@ -5,9 +5,11 @@ Projeto de chat e gerenciamento de tarefas (Kanban) com comunicação em tempo r
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend
-- **Node.js** v22+
+- **Node.js** v20+
 - **Express** - Framework web
 - **Socket.IO** - Comunicação em tempo real via WebSockets
+- **Prisma** - ORM para banco de dados
+- **SQLite** - Banco de dados relacional
 - **CORS** - Habilitado para desenvolvimento
 
 ### Frontend
@@ -24,17 +26,23 @@ chat-main/
 ├── server/                 # Backend Node.js
 │   ├── index.js           # Servidor Express + Socket.IO
 │   ├── package.json
-│   └── public/            # Cliente estático alternativo
+│   ├── .env               # Variáveis de ambiente (DATABASE_URL)
+│   └── prisma/            # Configuração Prisma
+│       ├── schema.prisma  # Schema do banco de dados
+│       ├── dev.db         # Banco SQLite
+│       └── migrations/    # Histórico de migrações
 │
 └── client/                # Frontend React
     ├── src/
     │   ├── App.tsx        # Componente principal (Chat + TaskBoard)
     │   ├── TaskBoard.tsx  # Componente Kanban
     │   ├── socket.ts      # Configuração Socket.IO
+    │   ├── main.tsx       # Entry point React
     │   └── index.css      # Estilos Tailwind
     ├── package.json
     ├── vite.config.ts     # Configuração Vite
-    └── tailwind.config.cjs # Configuração Tailwind
+    ├── tailwind.config.cjs # Configuração Tailwind
+    └── index.html         # HTML principal
 ```
 
 ## 🚀 Como Executar
@@ -49,6 +57,12 @@ chat-main/
 ```bash
 cd server
 npm install
+
+# Gerar Prisma Client
+npx prisma generate
+
+# Executar migrações do banco de dados (se necessário)
+npx prisma migrate dev
 ```
 
 **Frontend:**
@@ -58,6 +72,11 @@ npm install
 
 # Se houver erro com módulos nativos do Rollup:
 npm install @rollup/rollup-win32-x64-msvc
+```
+
+**Nota:** O arquivo `.env` no servidor deve conter:
+```
+DATABASE_URL="file:./prisma/dev.db"
 ```
 
 ### 2️⃣ Iniciar os Servidores
@@ -94,6 +113,7 @@ Abra o navegador em: **http://localhost:5173**
 - **Mover tarefas**: Navegue entre as colunas
 - **Remover tarefas**: Delete tarefas desnecessárias
 - **Sincronização em tempo real**: Todas as alterações são propagadas instantaneamente para todos os clientes
+- **Persistência**: Tarefas são salvas no banco de dados SQLite via Prisma
 
 ## 🔌 Eventos Socket.IO
 
@@ -109,13 +129,15 @@ Abra o navegador em: **http://localhost:5173**
 
 ## 📦 Estrutura de Dados
 
-### Task
+### Task (Prisma Model)
 ```typescript
 {
-  id: number;
+  id: number;              // Auto-incremento
   title: string;
   description?: string;
   status: 'todo' | 'in-progress' | 'done';
+  createdAt: DateTime;     // Auto-gerado
+  updatedAt: DateTime;     // Auto-atualizado
 }
 ```
 
@@ -155,6 +177,19 @@ export const socket = io("http://localhost:3001");
 
 ## 🐛 Solução de Problemas
 
+### Erro: "PrismaClient is unable to run"
+```bash
+cd server
+npx prisma generate
+```
+
+### Erro: "Cannot find module @prisma/client"
+```bash
+cd server
+npm install @prisma/client
+npx prisma generate
+```
+
 ### Erro: "Cannot find module @rollup/rollup-win32-x64-msvc"
 ```bash
 cd client
@@ -162,7 +197,7 @@ npm install @rollup/rollup-win32-x64-msvc
 ```
 
 ### Erro: "Vite requires Node.js >= 20.19.0"
-- Atualize o Node.js para a versão 22+
+- Atualize o Node.js para a versão 20.9+
 - Download: https://nodejs.org/
 
 ### Porta já em uso
@@ -182,6 +217,13 @@ cd client
 npm install tailwindcss postcss autoprefixer
 ```
 
+### Visualizar/Editar banco de dados
+```bash
+cd server
+npx prisma studio
+# Abre interface web em http://localhost:5555
+```
+
 ## 🎨 Personalização
 
 ### Modificar Cores do Tailwind
@@ -198,16 +240,20 @@ module.exports = {
 }
 ```
 
-### Adicionar Persistência de Dados
-Atualmente as tarefas são armazenadas em memória. Para persistir:
-- Adicione **MongoDB** ou **SQLite**
-- Modifique `server/index.js` para salvar/carregar do banco
+### Modificar Schema do Banco de Dados
+Edite `server/prisma/schema.prisma` e execute:
+```bash
+cd server
+npx prisma migrate dev --name sua_alteracao
+npx prisma generate
+```
 
 ## 📝 Notas
 
 - **Desenvolvimento**: CORS está configurado com `origin: '*'` - **restrinja antes de produção**
-- **Armazenamento**: Tarefas são perdidas ao reiniciar o servidor (armazenamento em memória)
+- **Armazenamento**: Tarefas são persistidas no banco de dados SQLite via Prisma
 - **Segurança**: Não há autenticação - adicione se necessário para produção
+- **Chat**: Mensagens do chat não são persistidas (apenas em memória durante a sessão)
 
 ## 👨‍💻 Desenvolvimento
 
@@ -226,5 +272,5 @@ npm run preview
 
 ---
 
-**Desenvolvido com ❤️ usando Node.js, Express, Socket.IO, React, TypeScript, Vite e Tailwind CSS**
+**Desenvolvido com ❤️ usando Node.js, Express, Socket.IO, Prisma, SQLite, React, TypeScript, Vite e Tailwind CSS**
 
