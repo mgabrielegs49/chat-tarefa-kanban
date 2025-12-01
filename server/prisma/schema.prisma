@@ -1,20 +1,122 @@
+// ============================================================================
+// SCHEMA DO PRISMA (schema.prisma)
+// ============================================================================
+// Este arquivo define o schema do banco de dados usando Prisma.
+// O Prisma é um ORM (Object-Relational Mapping) que facilita o trabalho
+// com bancos de dados, gerando tipos TypeScript automaticamente.
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// ============================================================================
+// CONFIGURAÇÃO DO GENERATOR
+// ============================================================================
+
+/**
+ * Generator: Prisma Client
+ * 
+ * Configura como o Prisma Client será gerado.
+ * O Prisma Client é a biblioteca que você usa para fazer queries no banco.
+ */
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js" // Gera cliente JavaScript/TypeScript
 }
 
+// ============================================================================
+// CONFIGURAÇÃO DO DATASOURCE (BANCO DE DADOS)
+// ============================================================================
+
+/**
+ * Datasource: Configuração da conexão com o banco de dados
+ * 
+ * Define qual banco de dados será usado e como conectar.
+ */
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "sqlite" // Usa SQLite como banco de dados
+  // SQLite é um banco de dados embutido, perfeito para desenvolvimento
+  // Os dados são armazenados em um arquivo .db local
+  
+  url      = env("DATABASE_URL") // URL de conexão lida da variável de ambiente
+  // No arquivo .env deve ter: DATABASE_URL="file:./prisma/dev.db"
 }
 
+// ============================================================================
+// MODELOS DE DADOS
+// ============================================================================
+
+/**
+ * Model: Task (Tarefa)
+ * 
+ * Define a estrutura da tabela de tarefas no banco de dados.
+ * Cada campo representa uma coluna na tabela.
+ */
 model Task {
+  // ========================================================================
+  // CAMPOS DA TAREFA
+  // ========================================================================
+  
+  /**
+   * id: ID único da tarefa
+   * 
+   * @id: Marca este campo como chave primária
+   * @default(autoincrement()): Gera automaticamente valores incrementais (1, 2, 3...)
+   * Int: Tipo inteiro
+   */
   id          Int      @id @default(autoincrement())
+  
+  /**
+   * title: Título da tarefa
+   * 
+   * String: Tipo texto (obrigatório)
+   * Não pode ser nulo
+   */
   title       String
+  
+  /**
+   * description: Descrição da tarefa
+   * 
+   * String?: Tipo texto opcional (pode ser null)
+   * O ? indica que este campo é opcional
+   */
   description String?
+  
+  /**
+   * status: Status atual da tarefa
+   * 
+   * String: Tipo texto
+   * @default("todo"): Valor padrão é "todo" quando não especificado
+   * Valores esperados: "todo", "in-progress", "done"
+   */
   status      String   @default("todo")
+  
+  /**
+   * createdAt: Data e hora de criação da tarefa
+   * 
+   * DateTime: Tipo data/hora
+   * @default(now()): Define automaticamente como data/hora atual na criação
+   * Atualizado apenas quando a tarefa é criada
+   */
   createdAt   DateTime @default(now())
+  
+  /**
+   * updatedAt: Data e hora da última atualização da tarefa
+   * 
+   * DateTime: Tipo data/hora
+   * @updatedAt: Atualizado automaticamente sempre que a tarefa é modificada
+   * Mantém sempre a data/hora da última alteração
+   */
   updatedAt   DateTime @updatedAt
 }
+
+// ============================================================================
+// NOTAS ADICIONAIS
+// ============================================================================
+// 
+// Para aplicar mudanças no schema:
+// 1. Edite este arquivo
+// 2. Execute: npx prisma migrate dev --name nome_da_migracao
+// 3. Execute: npx prisma generate (para regenerar o Prisma Client)
+//
+// Para visualizar o banco de dados:
+// Execute: npx prisma studio
+// Abre interface web em http://localhost:5555

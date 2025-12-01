@@ -1,13 +1,44 @@
 <!doctype html>
+<!-- ============================================================================
+     ARQUIVO HTML PRINCIPAL (index.html)
+     ============================================================================
+     Este é o arquivo HTML base da aplicação React.
+     Contém a estrutura básica e o ponto de entrada para o React.
+-->
+
+<!-- Declaração do tipo de documento HTML5 -->
 <html lang="pt-BR">
+  <!-- Cabeçalho do documento HTML -->
   <head>
+    <!-- Meta tag para definir codificação de caracteres como UTF-8 -->
+    <!-- UTF-8 suporta todos os caracteres, incluindo acentos e emojis -->
     <meta charset="UTF-8" />
+    
+    <!-- Link para o favicon (ícone exibido na aba do navegador) -->
+    <!-- type="image/svg+xml": indica que é um arquivo SVG -->
+    <!-- href="/vite.svg": caminho do arquivo de ícone -->
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    
+    <!-- Meta tag viewport para responsividade em dispositivos móveis -->
+    <!-- width=device-width: largura igual à largura do dispositivo -->
+    <!-- initial-scale=1.0: zoom inicial de 100% -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Título da aplicação (exibido na aba do navegador) -->
     <title>Chat + TaskBoard</title>
   </head>
+  
+  <!-- Corpo do documento HTML -->
   <body>
+    <!-- Container raiz onde o React renderizará a aplicação -->
+    <!-- O React substituirá este elemento pela aplicação completa -->
+    <!-- id="root": identificador usado pelo React para encontrar este elemento -->
     <div id="root"></div>
+    
+    <!-- Script que carrega o ponto de entrada da aplicação React -->
+    <!-- type="module": indica que é um módulo ES6 (permite import/export) -->
+    <!-- src="/src/main.tsx": caminho do arquivo principal do React -->
+    <!-- Este arquivo é processado pelo Vite e renderiza a aplicação -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

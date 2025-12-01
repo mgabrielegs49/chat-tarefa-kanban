@@ -1,56 +1,119 @@
+/* ============================================================================
+   ESTILOS GLOBAIS DA APLICAÇÃO (index.css)
+   ============================================================================
+   Este arquivo contém as diretivas do Tailwind CSS e estilos customizados
+   aplicados globalmente em toda a aplicação.
+*/
+
+/* ============================================================================
+   DIRETIVAS DO TAILWIND CSS
+   ============================================================================ */
+
+/* Importa as camadas base do Tailwind (reset CSS, estilos base) */
 @tailwind base;
+
+/* Importa os componentes do Tailwind (utilitários de componentes) */
 @tailwind components;
+
+/* Importa as utilitárias do Tailwind (classes utilitárias) */
 @tailwind utilities;
 
+/* ============================================================================
+   ESTILOS GLOBAIS PERSONALIZADOS
+   ============================================================================ */
+
+/* Configuração para html, body e #root ocuparem 100% da altura */
+/* Isso garante que a aplicação ocupe toda a altura da tela */
 html, body, #root {
-	height: 100%;
-	min-height: 100vh;
+	height: 100%; /* Altura de 100% */
+	min-height: 100vh; /* Altura mínima de 100vh (viewport height) */
 }
 
+/* Estilos globais do body */
 body {
-	margin: 0;
+	margin: 0; /* Remove margem padrão do navegador */
+	
+	/* Define família de fontes com fallbacks */
+	/* Inter é a fonte principal, seguida de fontes do sistema */
 	font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-	overflow-x: hidden;
+	
+	overflow-x: hidden; /* Esconde scroll horizontal */
 }
 
-/* Custom styles for taskboard */
+/* ============================================================================
+   ESTILOS CUSTOMIZADOS PARA TASKBOARD
+   ============================================================================ */
+
+/* Classe para colunas do TaskBoard */
+/* @apply aplica classes do Tailwind */
 .column { 
   @apply bg-slate-50 rounded-md p-3 min-h-[200px];
+  /* bg-slate-50: fundo cinza claro */
+  /* rounded-md: bordas arredondadas médias */
+  /* p-3: padding de 0.75rem */
+  /* min-h-[200px]: altura mínima de 200px */
 }
 
+/* Classe para cards de tarefa */
 .task { 
   @apply bg-white border border-gray-200 rounded-md p-2 mb-2 cursor-pointer hover:shadow-md transition-shadow;
+  /* bg-white: fundo branco */
+  /* border border-gray-200: borda cinza clara */
+  /* rounded-md: bordas arredondadas */
+  /* p-2: padding pequeno */
+  /* mb-2: margem inferior */
+  /* cursor-pointer: cursor de ponteiro ao passar mouse */
+  /* hover:shadow-md: sombra ao passar mouse */
+  /* transition-shadow: transição suave de sombra */
 }
 
-/* Responsivo - melhorias para mobile */
+/* ============================================================================
+   ESTILOS RESPONSIVOS (MOBILE)
+   ============================================================================ */
+
+/* Media query para telas menores que 768px (tablets e mobile) */
 @media (max-width: 768px) {
+  /* Reduz tamanho da fonte base em mobile para melhor legibilidade */
   html {
-    font-size: 14px;
+    font-size: 14px; /* Fonte menor em mobile */
   }
   
+  /* Aumenta padding dos cards de tarefa em mobile */
   .task {
-    @apply p-3;
+    @apply p-3; /* Padding maior para facilitar toque */
   }
   
+  /* Reduz altura mínima das colunas em mobile */
   .column {
-    @apply min-h-[150px];
+    @apply min-h-[150px]; /* Altura menor para economizar espaço */
   }
 }
 
-/* Scrollbar customizado */
+/* ============================================================================
+   ESTILOS DE SCROLLBAR CUSTOMIZADA
+   ============================================================================ */
+
+/* Estiliza a scrollbar para navegadores WebKit (Chrome, Safari, Edge) */
+/* ::-webkit-scrollbar: seleciona a scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 8px; /* Largura da scrollbar vertical */
+  height: 8px; /* Altura da scrollbar horizontal */
 }
 
+/* Estiliza o track (trilha) da scrollbar */
+/* ::-webkit-scrollbar-track: área de fundo da scrollbar */
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-gray-100; /* Fundo cinza claro */
 }
 
+/* Estiliza o thumb (polegar) da scrollbar */
+/* ::-webkit-scrollbar-thumb: parte arrastável da scrollbar */
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-400 rounded-full;
+  @apply bg-gray-400 rounded-full; /* Cor cinza e formato arredondado */
 }
 
+/* Estiliza o thumb quando o mouse passa sobre ele */
+/* ::-webkit-scrollbar-thumb:hover: estado hover do thumb */
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-500;
+  @apply bg-gray-500; /* Cor mais escura ao passar mouse */
 }
